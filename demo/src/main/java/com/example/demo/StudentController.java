@@ -31,17 +31,21 @@ public class StudentController {
 
     @DeleteMapping("/students/byName/{name}")
     public String deleteStudentByName(@PathVariable String name) {
-    	  studentRepository.delete(studentRepository.findByName(name));
+    	  studentRepository.deleteAll(studentRepository.findByName(name));
     	    return "Student deleted successfully";
     }
 
     @PutMapping("/students/byName/{name}")
-    public Student updateStudentByName(@PathVariable String name, @RequestBody Student updatedStudent) {
-    	 Student student = studentRepository.findByName(name);
-    	     student.setName(updatedStudent.getName());
-             student.setAge(updatedStudent.getAge());
-             student.setMarks(updatedStudent.getMarks());
-             return studentRepository.save(student);
+    public List<Student> updateStudentByName(@PathVariable String name, @RequestBody Student updatedStudent) {
+    	
+    	 List<Student> students = studentRepository.findByName(name);
+
+    	    for (Student student : students) {
+    	        student.setName(updatedStudent.getName());
+    	        student.setAge(updatedStudent.getAge());
+    	        student.setMarks(updatedStudent.getMarks());
+    	    }
+             return studentRepository.saveAll(students);
         
     }
 }
